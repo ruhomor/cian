@@ -12,4 +12,5 @@ class CianItem(scrapy.Item):
     urls = scrapy.Field()
     metro = scrapy.Field()
     price = scrapy.Field()
+    price_per_meter = scrapy.Field()
     pass
