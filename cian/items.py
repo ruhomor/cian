@@ -16,4 +16,5 @@ class CianItem(scrapy.Item):
     metro = scrapy.Field()
     price = scrapy.Field()
     price_pm = scrapy.Field()
+    phone = scrapy.Field()
     pass
