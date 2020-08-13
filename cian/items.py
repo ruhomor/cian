@@ -8,9 +8,12 @@ import scrapy
 
 class CianItem(scrapy.Item):
     # define the fields for your item here like:
-    name = scrapy.Field()
+    desc = scrapy.Field()
+    jkname = scrapy.Field()
+    deadline = scrapy.Field()
+    address = scrapy.Field()
     urls = scrapy.Field()
     metro = scrapy.Field()
     price = scrapy.Field()
-    price_per_meter = scrapy.Field()
+    price_pm = scrapy.Field()
     pass
