@@ -4,8 +4,9 @@ from cian.items import CianItem
 
 class CianParser(scrapy.Spider):
     name = "cian-page"
+    page_num = 2
     start_urls = [
-        'https://cian.ru/cat.php?deal_type=sale&engine_version=2&offer_type=flat&region=1&room1=1&room2=1']
+        'https://cian.ru/cat.php?deal_type=sale&engine_version=2&offer_type=flat&p=1&region=1&room1=1&room2=1']
 
     def parse(self, response):
         item = CianItem()
@@ -20,3 +21,9 @@ class CianParser(scrapy.Spider):
         item['phone'] = response.xpath('//span[@data-name="PhoneText"]/text()').extract()  # ? click ?
 
         yield item
+
+        next_page = 'https://cian.ru/cat.php?deal_type=sale&engine_version=2&offer_type=flat&p='\
+                    + str(CianParser.page_num) + '&region=1&room1=1&room2=1'
+        if CianParser.page_num <= 4:
+            CianParser.page_num += 1
+            yield response.follow(next_page, callback=self.parse)
