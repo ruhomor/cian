@@ -44,14 +44,13 @@ class CianMobileParser(scrapy.Spider):
         item = CianCard()
         cards_wrapper = response.xpath('//div[@data-name="PageWrapper"]')
         self.driver.get(self.start_urls[0])
+        next = self.driver.find_element_by_xpath('//div[@class="c-footer-tomobile"]/a')
+        next.click()
 
         while True: # clicks button as long as it exists
             try:
                 next = self.driver.find_element_by_xpath('//button[@data-mark="Button"]')
                 next.click()
-                print()
-                print("!!!CLICK!!!") # debug print
-                print()
             except:
                 break
 
@@ -59,11 +58,6 @@ class CianMobileParser(scrapy.Spider):
 
         a = 1
         for card in cards_wrapper.xpath('//section[@data-name="CardContainer"]'):
-            print()
-            print()
-            print(a)
-            print()
-            print()
             a += 1
             item['urls'] = card.xpath('.//div[@data-name="LinkArea"]/descendant::node()/@href').extract_first()
             item['metro'] = card.xpath('.//div[@data-name="Underground"]/descendant::node()/text()').extract_first()
