@@ -7,6 +7,7 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import json
+import pandas as pd
 
 
 class CianPipeline:
@@ -20,4 +21,17 @@ class CianPipeline:
 
     def process_item(self, item, spider):
         self.info.append(dict(item))
+        return item
+
+class CianPipelineAppendAll:
+    def __init__(self):
+        self.df = pd.DataFrame(columns=['desc', 'jkname', 'deadline', 'address', 'urls', 'price', 'price_pm', 'phone'])
+
+    def close_spider(self, spider):
+        with open('items.csv', 'a') as self.file:
+            self.df.to_csv(self.file, header=False)
+        self.file.close()
+
+    def process_item(self, item, spider):
+        self.df.append(dict(item), ignore_index=True)
         return item
