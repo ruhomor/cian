@@ -64,7 +64,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'cian.pipelines.CianPipelineAppendAll': 1,
+ #   'cian.pipelines.CianPipelineAppendAll': 1,
+    'cian.pipelines.CianPipelineAppendOneByOne': 1,
  #       'cian.pipelines.CianPipeline': 1,
 }
 

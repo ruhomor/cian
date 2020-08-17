@@ -23,7 +23,8 @@ class CianPipeline:
         self.info.append(dict(item))
         return item
 
-class CianPipelineAppendAll:
+
+class CianPipelineAppendAll:  # TODO fix indices
     def __init__(self):
         self.df = pd.DataFrame(columns=['desc', 'jkname', 'deadline', 'address', 'urls', 'price', 'price_pm', 'phone'])
 
@@ -33,5 +34,18 @@ class CianPipelineAppendAll:
         self.file.close()
 
     def process_item(self, item, spider):
-        self.df.append(dict(item), ignore_index=True)
+        self.df = self.df.append(dict(item), ignore_index=True)
+        return item
+
+
+class CianPipelineAppendOneByOne:  # TODO fix indices
+    def __init__(self):
+        self.df = pd.DataFrame(columns=['desc', 'jkname', 'deadline', 'address', 'urls', 'price', 'price_pm', 'phone'])
+        self.file = open('items.csv', 'a')
+
+    def close_spider(self, spider):
+        self.file.close()
+
+    def process_item(self, item, spider):
+        self.df.append(dict(item), ignore_index=True).to_csv(self.file, header=False)
         return item
