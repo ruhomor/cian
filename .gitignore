@@ -2,6 +2,9 @@
 *.json
 *.jl
 .idea
+*.csv
+*.xlsx
+*.xls
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

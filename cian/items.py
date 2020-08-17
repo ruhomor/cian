@@ -6,7 +6,7 @@
 import scrapy
 
 
-class CianItem(scrapy.Item):
+class CianCard(scrapy.Item):
     # define the fields for your item here like:
     desc = scrapy.Field()
     jkname = scrapy.Field()
