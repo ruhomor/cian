@@ -1,6 +1,8 @@
 import scrapy
 from cian.items import CianCard
 from selenium import webdriver
+from scrapy.http.request import Request
+from cian import pipelines
 
 
 class CianParser(scrapy.Spider):
@@ -10,9 +12,18 @@ class CianParser(scrapy.Spider):
     start_urls = [
         'https://cian.ru/cat.php?deal_type=sale&engine_version=2&offer_type=flat&p=1&region=1&room1=1&room2=1']
     page = start_urls[0]
+    custom_settings = {
+        'USER_NAME': 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-en) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4',
+    }
+
+    pipeline = {pipelines.CianPipelineAppendOneByOne, pipelines.AppendToFilePipeline}
 
     def __init__(self):
         self.driver = webdriver.Chrome()
+
+    # def start_requests(self):
+    #     for url in self.start_urls:
+    #         yield Request(url, headers={'Referer': 'https://cian.ru/'}, dont_filter=True)
 
     def parse(self, response):
         item = CianCard()
@@ -39,6 +50,7 @@ class CianParser(scrapy.Spider):
             item['phone'] = offer.xpath('.//span[@data-name="PhoneText"]/text()').extract()  # i dont like this xpath ? click ?
 
             yield item
+
         if self.page_num < self.pages_to_scrap:
             yield response.follow(self.nextpage(), callback=self.parse)
         else:
@@ -70,7 +82,7 @@ class CianMobileParser(scrapy.Spider):
             try:
                 next = self.driver.find_element_by_xpath('//button[@data-mark="Button"]')
                 next.click()
-            except:
+            except: # нужно стараться всегда указывать ошибку, которую хочешь отловить
                 break
 
         self.driver.close()
